@@ -1,12 +1,14 @@
-{"name": "supabase",
-"version": "1.0.0",
-"description": "",
-"main": "index.html",
-"scripts": {
-  "start": "nodemon postgres_changes.js"
-},
+{
+  "name": "supabase",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "nodemon Fusion.js"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.32.0",
+    "https": "^1.0.0",
     "nodemon": "^3.0.1"
   }
 }
