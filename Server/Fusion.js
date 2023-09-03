@@ -29,25 +29,27 @@ const insert = async () => {
       });
       resp.on("end", async () => {
         //insert data to supabase database event table
-
         events = JSON.parse(t1).data;
+
+        let items = [];
+        events.forEach((element) => {
+          let i = {
+            eventId: element.event["id"],
+            name: element.event["summary"],
+            startTime: element.event.start.dateTime,
+            endTime: element.event.end.dateTime,
+            location: "NULL",
+            summary: "NULL",
+            status: "NULL",
+            description: "NULL",
+            calendarId: element.event.organizer.email,
+          };
+          items.push(i);
+        });
 
         let { data, error } = await supabase
           .from("events")
-          .insert([
-            {
-              eventId: events[0].event["id"],
-              name: events[0].event["summary"],
-              startTime: events[0].event.start.dateTime,
-              endTime: events[0].event.end.dateTime,
-              location: "NULL",
-              summary: "NULL",
-              status: "NULL",
-              description: "NULL",
-
-              calendarId: events[0].event.organizer.email,
-            },
-          ])
+          .insert(items)
           .select();
         if (error) {
           console.error(error);
@@ -61,48 +63,6 @@ const insert = async () => {
     });
 
   req.end();
-  //
-  /* let { data, error } = await supabase
-    .from("events")
-    .insert([
-      {
-        name: events[0].event["summary"],
-        startTime: events[0].event.start.startTime, // "2023-09-02T13:30:00+03:30",
-        endTime: events[0].event.end.endTime, // "2023-09-02T14:30:00+03:30",
-        location: "NULL",
-        summary: "NULL",
-        status: "NULL",
-        description: "NULL",
-
-        calendarId: events[0].event.organizer.email,
-        // "7316873df2f349be5dca79f5db526b40c70d90650e5e8f01ec5beb01fbda6e7e@group.calendar.google.com",
-      },
-    ])
-    .select();
-  if (error) {
-    console.error(error);
-    return;
-  }
-  console.log("data", data); */
 };
 
 insert();
-
-/* const GetDataPipdream = async () => {
-  const req = https
-    .request(options, (resp) => {
-      let t1 = "";
-      resp.on("data", (chunk) => {
-        t1 += chunk;
-      });
-      resp.on("end", () => {
-        console.log("fff", JSON.parse(t1).data);
-        return JSON.parse(t1).data;
-      });
-    })
-    .on("error", (err) => {
-      console.error("[error] " + err.message);
-    });
-
-  req.end();
-}; */
